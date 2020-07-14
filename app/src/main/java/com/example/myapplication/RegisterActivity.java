@@ -54,9 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
                 String name = eName.getText().toString();
                 String password = ePassword.getText().toString();
                 String email = eEmail.getText().toString();
-                /*Intent resultIntent = new Intent();*/
 
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(email)) {
+
                     Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
 
@@ -73,18 +73,29 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private class UpdateDatabaseAsyncTask extends AsyncTask<User, Void, Void> {
+    private class UpdateDatabaseAsyncTask extends AsyncTask<User, Void, Boolean> {
         @Override
-        protected Void doInBackground(User... users) {
-            userDao.addUser(users[0]);
-            return null;
+        protected Boolean doInBackground(User... users) {
+            boolean userCreatedSuccessful;
+            String username = users[0].getUsername();
+            if (userDao.findByUsername(username) != null) {
+                userCreatedSuccessful = false;
+            } else {
+                userCreatedSuccessful = true;
+                userDao.addUser(users[0]);
+            }
+            return userCreatedSuccessful;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Intent register = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(register);
+        protected void onPostExecute(Boolean userCreated) {
+            super.onPostExecute(userCreated);
+            if (userCreated) {
+                Intent register = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(register);
+            } else {
+                Toast.makeText(RegisterActivity.this, "Username already used", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
