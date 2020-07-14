@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Trace;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -13,27 +12,42 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Registration extends AppCompatActivity {
-//    UserLocalStore userLocalStore;
-    MyDao userDao;
+public class RegisterActivity extends AppCompatActivity {
+    UserDao userDao;
+    private EditText eName;
+    private EditText eUsername;
+    private EditText ePassword;
+    private EditText eEmail;
+    private Button registerBt;
+    private TextView textView2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
-//        userLocalStore = new UserLocalStore(this);
-        userDao = MyAppDatabase.getMyAppDatabase(getApplicationContext()).myDao();
+        setContentView(R.layout.activity_register);
 
-        final TextView textView2 = (TextView) findViewById(R.id.textView2);
+        initDbDao();
+        initViews();
+        setActions();
+    }
+
+    private void initDbDao() {
+        userDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
+    }
+
+    private void initViews() {
+        eName = findViewById(R.id.eName);
+        eUsername = findViewById(R.id.eUsername);
+        ePassword = findViewById(R.id.ePassword);
+        eEmail = findViewById(R.id.eEmail);
+        registerBt = findViewById(R.id.registerBt);
+        textView2 = findViewById(R.id.textView2);
         textView2.setText("Sign Up");
+    }
 
-        final EditText eName = findViewById(R.id.eName);
-        final EditText eUsername = findViewById(R.id.eUsername);
-        final EditText ePassword = findViewById(R.id.ePassword);
-        final EditText eEmail = findViewById(R.id.eEmail);
-        Button button = findViewById(R.id.button);
-
-        button.setOnClickListener(new View.OnClickListener() {
+    private void setActions() {
+        registerBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = eUsername.getText().toString();
@@ -43,7 +57,7 @@ public class Registration extends AppCompatActivity {
                 /*Intent resultIntent = new Intent();*/
 
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(email)) {
-                    Toast.makeText(Registration.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
 
                     User registeredData = new User();
@@ -52,16 +66,14 @@ public class Registration extends AppCompatActivity {
                     registeredData.setName(name);
                     registeredData.setEmail(email);
 
-                    RegAsyncTask regAsyncTask = new RegAsyncTask();
-                    regAsyncTask.execute(registeredData);
-
+                    UpdateDatabaseAsyncTask updateDatabaseAsyncTask = new UpdateDatabaseAsyncTask();
+                    updateDatabaseAsyncTask.execute(registeredData);
                 }
-
             }
         });
     }
 
-    private class RegAsyncTask extends AsyncTask<User, Void, Void >{
+    private class UpdateDatabaseAsyncTask extends AsyncTask<User, Void, Void> {
         @Override
         protected Void doInBackground(User... users) {
             userDao.addUser(users[0]);
@@ -71,7 +83,7 @@ public class Registration extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Intent register = new Intent(getApplicationContext(), MainActivity.class);
+            Intent register = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(register);
         }
     }

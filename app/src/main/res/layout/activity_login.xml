@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <EditText
         android:id="@+id/editUsername"
@@ -33,7 +33,7 @@
         android:autofillHints="" />
 
     <Button
-        android:id="@+id/registerbtn"
+        android:id="@+id/registerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="76dp"
@@ -56,13 +56,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/logbtn"
+        android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/registerbtn"
+        app:layout_constraintStart_toEndOf="@+id/registerBtn"
         app:layout_constraintTop_toBottomOf="@+id/editPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

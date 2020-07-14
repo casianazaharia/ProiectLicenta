@@ -5,7 +5,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 @Dao
-public interface MyDao {
+public interface UserDao {
 
     @Insert
     public Void addUser(User user);

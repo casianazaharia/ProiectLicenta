@@ -8,23 +8,19 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "USERS")
 public class User {
 
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "username")
+    public String username;
 
     @ColumnInfo(name = "name")
     public String name;
-
-    @ColumnInfo(name = "username")
-    @PrimaryKey
-    @NonNull
-    public String username;
 
     @ColumnInfo(name = "password")
     public String password;
 
     @ColumnInfo(name = "email")
     public String email;
-
-
-
 
     public String getName() {
         return name;
