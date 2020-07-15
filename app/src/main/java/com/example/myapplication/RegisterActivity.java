@@ -80,29 +80,12 @@ public class RegisterActivity extends AppCompatActivity {
                 String username = eUsername.getText().toString();
                 String name = eName.getText().toString();
                 String password = ePassword.getText().toString();
-                String email = eEmail.getText().toString();
                 String confirmPass = confirmPassword.getText().toString();
-
-                boolean correctPass;
-                boolean correctEmail;
-                if (!password.equals(confirmPass)) {
-                    confirmPassword.setError("Passwords do not match");
-                    correctPass = false;
-                } else {
-                    correctPass = true;
-                }
-                if (!validEmail(email)) {
-                    eEmail.setError("Not valid email");
-                    correctEmail = false;
-                } else {
-                    correctEmail = true;
-                }
+                String email = eEmail.getText().toString();
 
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPass) || TextUtils.isEmpty(email)) {
-
                     Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                } else if (correctEmail && correctPass) {
-
+                } else if (isEmailValid() && arePasswordsMatching()) {
                     User registeredData = new User();
                     registeredData.setUsername(username);
                     registeredData.setPassword(password);
@@ -114,6 +97,27 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean isEmailValid() {
+        boolean isEmailCorrect = true;
+        String email = eEmail.getText().toString();
+        if (!validEmail(email)) {
+            eEmail.setError("Not valid email");
+            isEmailCorrect = false;
+        }
+        return isEmailCorrect;
+    }
+
+    private boolean arePasswordsMatching() {
+        boolean arePasswordsMatching = true;
+        String password = ePassword.getText().toString();
+        String confirmPass = confirmPassword.getText().toString();
+        if (!password.equals(confirmPass)) {
+            confirmPassword.setError("Passwords do not match");
+            arePasswordsMatching = false;
+        }
+        return arePasswordsMatching;
     }
 
     private class UpdateDatabaseAsyncTask extends AsyncTask<User, Void, Boolean> {
@@ -137,7 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Intent register = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(register);
             } else {
-                Toast.makeText(RegisterActivity.this, "Username already used", Toast.LENGTH_SHORT).show();
+                eUsername.setError("Username already exists");
             }
         }
     }
