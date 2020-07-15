@@ -53,6 +53,20 @@
         app:layout_constraintTop_toBottomOf="@+id/eUsername" />
 
     <EditText
+        android:id="@+id/confirmPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toTopOf="@+id/eEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eUsername"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
         android:id="@+id/eEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,7 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ePassword"
-        app:layout_constraintVertical_bias="0.044" />
+        app:layout_constraintVertical_bias="0.237" />
 
     <Button
         android:id="@+id/registerBt"

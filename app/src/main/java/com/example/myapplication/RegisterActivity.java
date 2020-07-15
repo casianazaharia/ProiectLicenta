@@ -21,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText eName;
     private EditText eUsername;
     private EditText ePassword;
+    private EditText confirmPassword;
     private EditText eEmail;
     private Button registerBt;
     private TextView textView2;
@@ -50,10 +51,27 @@ public class RegisterActivity extends AppCompatActivity {
         eUsername = findViewById(R.id.eUsername);
         ePassword = findViewById(R.id.ePassword);
         eEmail = findViewById(R.id.eEmail);
+        confirmPassword = findViewById(R.id.confirmPassword);
         registerBt = findViewById(R.id.registerBt);
         textView2 = findViewById(R.id.textView2);
         textView2.setText("Sign Up");
     }
+
+  /*  private boolean validate(){
+        boolean check = true;
+        String email = eEmail.getText().toString();
+        String password = ePassword.getText().toString();
+        String confirmPass = confirmPassword.getText().toString();
+
+        if(!password.equals(confirmPass)){
+            Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return check = false;
+        } else if (!validEmail(email)){
+            Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            check = false;
+        }
+        return check;
+    }*/
 
     private void setActions() {
         registerBt.setOnClickListener(new View.OnClickListener() {
@@ -63,25 +81,36 @@ public class RegisterActivity extends AppCompatActivity {
                 String name = eName.getText().toString();
                 String password = ePassword.getText().toString();
                 String email = eEmail.getText().toString();
+                String confirmPass = confirmPassword.getText().toString();
 
-                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(email)) {
+                boolean correctPass;
+                boolean correctEmail;
+                if (!password.equals(confirmPass)) {
+                    confirmPassword.setError("Passwords do not match");
+                    correctPass = false;
+                } else {
+                    correctPass = true;
+                }
+                if (!validEmail(email)) {
+                    eEmail.setError("Not valid email");
+                    correctEmail = false;
+                } else {
+                    correctEmail = true;
+                }
+
+                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPass) || TextUtils.isEmpty(email)) {
 
                     Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (!validEmail(email)) {
+                } else if (correctEmail && correctPass) {
 
-                        Toast.makeText(RegisterActivity.this, "Enter valid email", Toast.LENGTH_SHORT).show();
-                    } else {
+                    User registeredData = new User();
+                    registeredData.setUsername(username);
+                    registeredData.setPassword(password);
+                    registeredData.setName(name);
+                    registeredData.setEmail(email);
 
-                        User registeredData = new User();
-                        registeredData.setUsername(username);
-                        registeredData.setPassword(password);
-                        registeredData.setName(name);
-                        registeredData.setEmail(email);
-
-                        UpdateDatabaseAsyncTask updateDatabaseAsyncTask = new UpdateDatabaseAsyncTask();
-                        updateDatabaseAsyncTask.execute(registeredData);
-                    }
+                    UpdateDatabaseAsyncTask updateDatabaseAsyncTask = new UpdateDatabaseAsyncTask();
+                    updateDatabaseAsyncTask.execute(registeredData);
                 }
             }
         });
