@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String inputUsername = editUsername.getText().toString();
+
                 new SearchInDatabaseAsyncTask().execute(inputUsername);
             }
         });
@@ -70,11 +71,13 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(User foundUser) {
             super.onPostExecute(foundUser);
-            if (foundUser == null) {
-                Toast.makeText(LoginActivity.this, "Wrong username/password", Toast.LENGTH_SHORT).show();
-            } else {
+            String inputPassword = editPassword.getText().toString();
+            if (foundUser != null && inputPassword.equals(foundUser.password) ) {
                 Intent loggedin = new Intent(getApplicationContext(), AvailableSlotsActivity.class);
                 startActivity(loggedin);
+
+            } else {
+                Toast.makeText(LoginActivity.this, "Wrong username/password", Toast.LENGTH_SHORT).show();
             }
 
         }
