@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     UserDao userDao;
@@ -30,6 +34,11 @@ public class RegisterActivity extends AppCompatActivity {
         initDbDao();
         initViews();
         setActions();
+    }
+
+    private boolean validEmail(String email) {
+        Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return pattern.matcher(email).matches();
     }
 
     private void initDbDao() {
@@ -59,15 +68,20 @@ public class RegisterActivity extends AppCompatActivity {
 
                     Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
+                    if (!validEmail(email)) {
 
-                    User registeredData = new User();
-                    registeredData.setUsername(username);
-                    registeredData.setPassword(password);
-                    registeredData.setName(name);
-                    registeredData.setEmail(email);
+                        Toast.makeText(RegisterActivity.this, "Enter valid email", Toast.LENGTH_SHORT).show();
+                    } else {
 
-                    UpdateDatabaseAsyncTask updateDatabaseAsyncTask = new UpdateDatabaseAsyncTask();
-                    updateDatabaseAsyncTask.execute(registeredData);
+                        User registeredData = new User();
+                        registeredData.setUsername(username);
+                        registeredData.setPassword(password);
+                        registeredData.setName(name);
+                        registeredData.setEmail(email);
+
+                        UpdateDatabaseAsyncTask updateDatabaseAsyncTask = new UpdateDatabaseAsyncTask();
+                        updateDatabaseAsyncTask.execute(registeredData);
+                    }
                 }
             }
         });
