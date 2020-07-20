@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -27,10 +26,10 @@ public class AvailableSlotsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_slots);
 
-        txtSeatSelected = findViewById(R.id.txt_seat_selected);
+
 
         List<AbstractItem> items = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 40; i++) {
 
             if (i % COLUMNS == 0 || i % COLUMNS == 4) {
                 items.add(new EdgeItem(String.valueOf(i)));
@@ -41,9 +40,9 @@ public class AvailableSlotsActivity extends AppCompatActivity {
             }
         }
 
-        OnSeatSelected onSeatSelectedListener = new OnSeatSelected() {
+        OnSpotSelected onSpotSelectedListener = new OnSpotSelected() {
             @Override
-            public void onSeatSelected(int count) {
+            public void onSpotSelected(int count) {
 
             }
         };
@@ -52,9 +51,12 @@ public class AvailableSlotsActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.lst_items);
         recyclerView.setLayoutManager(manager);
 
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, onSeatSelectedListener, items);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, onSpotSelectedListener, items);
         recyclerView.setAdapter(adapter);
+
 
     }
 
+
 }
+

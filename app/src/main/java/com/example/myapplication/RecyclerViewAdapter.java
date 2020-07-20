@@ -15,27 +15,27 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends SelectableAdapter<RecyclerView.ViewHolder> {
 
-    private OnSeatSelected mOnSeatSelected;
+    private OnSpotSelected mOnSpotSelected;
 
     private static class EdgeViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgSeat;
-        ImageView imgSeatSelected;
+        ImageView imgSpot;
+        ImageView imgSpotSelected;
 
         public EdgeViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgSeat = itemView.findViewById(R.id.img_seat);
-            imgSeatSelected = itemView.findViewById(R.id.img_seat_selected);
+            imgSpot = itemView.findViewById(R.id.img_spot);
+            imgSpotSelected = itemView.findViewById(R.id.img_spot_selected);
         }
     }
 
     private static class CenterViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgSeat;
-        ImageView imgSeatSelected;
+        ImageView imgSpot;
+        ImageView imgSpotSelected;
 
         public CenterViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgSeat = itemView.findViewById(R.id.img_seat);
-            imgSeatSelected = itemView.findViewById(R.id.img_seat_selected);
+            imgSpot = itemView.findViewById(R.id.img_spot);
+            imgSpotSelected = itemView.findViewById(R.id.img_spot_selected);
         }
     }
 
@@ -50,8 +50,8 @@ public class RecyclerViewAdapter extends SelectableAdapter<RecyclerView.ViewHold
     private List<AbstractItem> mItems;
     private LayoutInflater mLayoutInflater;
 
-    public RecyclerViewAdapter(Context context, OnSeatSelected onSeatSelectedListener, List<AbstractItem> items) {
-        mOnSeatSelected = onSeatSelectedListener;
+    public RecyclerViewAdapter(Context context, OnSpotSelected onSpotSelectedListener, List<AbstractItem> items) {
+        mOnSpotSelected = onSpotSelectedListener;
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
         mItems = items;
@@ -88,26 +88,27 @@ public class RecyclerViewAdapter extends SelectableAdapter<RecyclerView.ViewHold
         if (type == AbstractItem.TYPE_CENTER) {
             final CenterItem item = (CenterItem) mItems.get(position);
             CenterViewHolder holder = (CenterViewHolder) viewHolder;
-            holder.imgSeat.setOnClickListener(new View.OnClickListener() {
+            holder.imgSpot.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     toggleSelection(position);
-                    mOnSeatSelected.onSeatSelected(getSelectedItemCount());
+                    mOnSpotSelected.onSpotSelected(getSelectedItemCount());
                 }
             });
-            holder.imgSeatSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+            holder.imgSpotSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
         } else if (type == AbstractItem.TYPE_EDGE) {
             final EdgeItem item = (EdgeItem) mItems.get(position);
             EdgeViewHolder holder = (EdgeViewHolder) viewHolder;
-            holder.imgSeat.setOnClickListener(new View.OnClickListener() {
+            holder.imgSpot.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     toggleSelection(position);
-                    mOnSeatSelected.onSeatSelected(getSelectedItemCount());
+                    mOnSpotSelected.onSpotSelected(getSelectedItemCount());
                 }
             });
-            holder.imgSeatSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+            holder.imgSpotSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
         }
+
     }
 
 }

@@ -57,22 +57,6 @@ public class RegisterActivity extends AppCompatActivity {
         textView2.setText("Sign Up");
     }
 
-  /*  private boolean validate(){
-        boolean check = true;
-        String email = eEmail.getText().toString();
-        String password = ePassword.getText().toString();
-        String confirmPass = confirmPassword.getText().toString();
-
-        if(!password.equals(confirmPass)){
-            Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-            return check = false;
-        } else if (!validEmail(email)){
-            Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            check = false;
-        }
-        return check;
-    }*/
-
     private void setActions() {
         registerBt.setOnClickListener(new View.OnClickListener() {
             @Override
