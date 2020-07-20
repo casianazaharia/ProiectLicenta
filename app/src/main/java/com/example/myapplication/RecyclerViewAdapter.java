@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,26 +17,32 @@ import java.util.List;
 public class RecyclerViewAdapter extends SelectableAdapter<RecyclerView.ViewHolder> {
 
     private OnSpotSelected mOnSpotSelected;
+    private int count = 0;
+
 
     private static class EdgeViewHolder extends RecyclerView.ViewHolder {
         ImageView imgSpot;
         ImageView imgSpotSelected;
+        TextView spotNo;
 
         public EdgeViewHolder(@NonNull View itemView) {
             super(itemView);
             imgSpot = itemView.findViewById(R.id.img_spot);
             imgSpotSelected = itemView.findViewById(R.id.img_spot_selected);
+            spotNo = itemView.findViewById(R.id.spot_no);
         }
     }
 
     private static class CenterViewHolder extends RecyclerView.ViewHolder {
         ImageView imgSpot;
         ImageView imgSpotSelected;
+        TextView spotNo;
 
         public CenterViewHolder(@NonNull View itemView) {
             super(itemView);
             imgSpot = itemView.findViewById(R.id.img_spot);
             imgSpotSelected = itemView.findViewById(R.id.img_spot_selected);
+            spotNo = itemView.findViewById(R.id.spot_no);
         }
     }
 
@@ -85,9 +92,12 @@ public class RecyclerViewAdapter extends SelectableAdapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
         int type = mItems.get(position).getType();
+
         if (type == AbstractItem.TYPE_CENTER) {
             final CenterItem item = (CenterItem) mItems.get(position);
             CenterViewHolder holder = (CenterViewHolder) viewHolder;
+            count++;
+            holder.spotNo.setText(count+"");
             holder.imgSpot.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -95,10 +105,14 @@ public class RecyclerViewAdapter extends SelectableAdapter<RecyclerView.ViewHold
                     mOnSpotSelected.onSpotSelected(getSelectedItemCount());
                 }
             });
+
             holder.imgSpotSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+
         } else if (type == AbstractItem.TYPE_EDGE) {
             final EdgeItem item = (EdgeItem) mItems.get(position);
             EdgeViewHolder holder = (EdgeViewHolder) viewHolder;
+            count++;
+            holder.spotNo.setText(count+"");
             holder.imgSpot.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -18,14 +18,11 @@ public class AvailableSlotsActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     private static final int COLUMNS = 5;
-    private TextView txtSeatSelected;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_slots);
-
 
 
         List<AbstractItem> items = new ArrayList<>();
