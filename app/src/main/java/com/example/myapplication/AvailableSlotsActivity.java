@@ -5,26 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AvailableSlotsActivity extends AppCompatActivity {
 
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
     private static final int COLUMNS = 5;
-
     Button bookSpot;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +33,13 @@ public class AvailableSlotsActivity extends AppCompatActivity {
         for (int i = 0; i < 40; i++) {
             ParkingSpot spot = new ParkingSpot();
             spot.spotNo = i + 1;
-            spot.isAvailable = i % 3 == 0;
+            spot.isAvailable =  i % 3 == 0;
 
             parkingSpotList.add(spot);
         }
 
         int noOfEmptyItems = parkingSpotList.size() / 4;
-        noOfEmptyItems += parkingSpotList.size() % 4 == 3 ? 1 : 0;
-
+        noOfEmptyItems += ((parkingSpotList.size() % 4) == 3) ? 1 : 0;
         int noOfTotalItems = parkingSpotList.size() + noOfEmptyItems;
 
         int indexOfParkingSpots = 0;
@@ -70,20 +65,32 @@ public class AvailableSlotsActivity extends AppCompatActivity {
         GridLayoutManager manager = new GridLayoutManager(this, COLUMNS);
         RecyclerView recyclerView = findViewById(R.id.lst_items);
         recyclerView.setLayoutManager(manager);
-
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, onSpotSelectedListener, items);
         recyclerView.setAdapter(adapter);
-
-
 
         bookSpot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AvailableSlotsActivity.this);
+                builder.setTitle("Parking Spot Booked")
+                        .setMessage("You will have 20 minutes to scan your QR code")
+                        .setPositiveButton("Scan now", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent scanNow = new Intent(getApplicationContext(), QrCodeActivity.class);
+                                startActivity(scanNow);
+                            }
+                        })
+                        .setNegativeButton("Scan later",null);
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
 
             }
         });
 
     }
+
 
 }
 
