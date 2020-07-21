@@ -13,22 +13,6 @@
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/ic_directions_grey_car" />
 
-    <ImageView
-        android:id="@+id/img_spot_selected"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/ic_directions_black_car" />
-
-    <ImageView
-        android:id="@+id/img_seat_reserved"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/ic_directions_red_car" />
-
     <TextView
         android:id="@+id/spot_no"
         android:layout_width="40dp"

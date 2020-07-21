@@ -5,16 +5,16 @@ public abstract class AbstractItem {
     public static final int TYPE_EDGE = 1;
     public static final int TYPE_EMPTY = 2;
 
-    private String label;
+    private ParkingSpot parkingSpot;
 
-    public AbstractItem(String label) {
-        this.label = label;
+    public AbstractItem(ParkingSpot parkingSpot) {
+        this.parkingSpot = parkingSpot;
     }
 
 
-    public String getLabel() {
+    public ParkingSpot getParkingSpot() {
 
-        return label;
+        return parkingSpot;
     }
 
     abstract public int getType();

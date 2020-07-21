@@ -2,8 +2,8 @@ package com.example.myapplication;
 
 public class EmptyItem extends AbstractItem {
 
-    public EmptyItem(String label) {
-        super(label);
+    public EmptyItem(ParkingSpot parkingSpot) {
+        super(parkingSpot);
     }
 
 

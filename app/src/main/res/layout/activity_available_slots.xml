@@ -6,20 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".AvailableSlotsActivity">
 
-    <TextView
-        android:id="@+id/txt_spot_selected"
-        android:layout_width="234dp"
-        android:layout_height="48dp"
-        android:layout_weight="1"
-        android:background="#009688"
-        android:gravity="center"
-        android:text="Book"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lst_items" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lst_items"
@@ -30,6 +16,15 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
+    <Button
+        android:id="@+id/book_spot"
+        android:layout_width="160dp"
+        android:layout_height="49dp"
+        android:text="Book spot"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lst_items" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

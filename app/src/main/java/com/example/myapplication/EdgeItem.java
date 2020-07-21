@@ -1,8 +1,8 @@
 package com.example.myapplication;
 
 public class EdgeItem extends AbstractItem {
-    public EdgeItem(String label) {
-        super(label);
+    public EdgeItem(ParkingSpot parkingSpot) {
+        super(parkingSpot);
     }
 
 

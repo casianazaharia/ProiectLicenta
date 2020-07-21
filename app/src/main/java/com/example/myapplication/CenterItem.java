@@ -1,8 +1,8 @@
 package com.example.myapplication;
 
 public class CenterItem extends AbstractItem {
-    public CenterItem(String label) {
-        super(label);
+    public CenterItem(ParkingSpot parkingSpot) {
+        super(parkingSpot);
     }
 
 

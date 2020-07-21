@@ -1,61 +1,31 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
-public class RecyclerViewAdapter extends SelectableAdapter<RecyclerView.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private OnSpotSelected mOnSpotSelected;
-    private int count = 0;
-
-
-    private static class EdgeViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgSpot;
-        ImageView imgSpotSelected;
-        TextView spotNo;
-
-        public EdgeViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imgSpot = itemView.findViewById(R.id.img_spot);
-            imgSpotSelected = itemView.findViewById(R.id.img_spot_selected);
-            spotNo = itemView.findViewById(R.id.spot_no);
-        }
-    }
-
-    private static class CenterViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgSpot;
-        ImageView imgSpotSelected;
-        TextView spotNo;
-
-        public CenterViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imgSpot = itemView.findViewById(R.id.img_spot);
-            imgSpotSelected = itemView.findViewById(R.id.img_spot_selected);
-            spotNo = itemView.findViewById(R.id.spot_no);
-        }
-    }
-
-    private static class EmptyViewHolder extends RecyclerView.ViewHolder {
-
-        public EmptyViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-    }
 
     private Context mContext;
     private List<AbstractItem> mItems;
     private LayoutInflater mLayoutInflater;
+
+    private Pair<ParkingSpot, Integer> selectedPair;
 
     public RecyclerViewAdapter(Context context, OnSpotSelected onSpotSelectedListener, List<AbstractItem> items) {
         mOnSpotSelected = onSpotSelectedListener;
@@ -77,12 +47,10 @@ public class RecyclerViewAdapter extends SelectableAdapter<RecyclerView.ViewHold
     @NotNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == AbstractItem.TYPE_CENTER) {
+        if (viewType == AbstractItem.TYPE_CENTER
+                || viewType == AbstractItem.TYPE_EDGE) {
             View itemView = mLayoutInflater.inflate(R.layout.parking_spots, parent, false);
-            return new CenterViewHolder(itemView);
-        } else if (viewType == AbstractItem.TYPE_EDGE) {
-            View itemView = mLayoutInflater.inflate(R.layout.parking_spots, parent, false);
-            return new EdgeViewHolder(itemView);
+            return new ParkingSpotViewHolder(itemView);
         } else {
             View itemView = new View(mContext);
             return new EmptyViewHolder(itemView);
@@ -93,36 +61,64 @@ public class RecyclerViewAdapter extends SelectableAdapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
         int type = mItems.get(position).getType();
 
-        if (type == AbstractItem.TYPE_CENTER) {
-            final CenterItem item = (CenterItem) mItems.get(position);
-            CenterViewHolder holder = (CenterViewHolder) viewHolder;
-            count++;
-            holder.spotNo.setText(count+"");
+        if (type == AbstractItem.TYPE_CENTER
+                || type == AbstractItem.TYPE_EDGE) {
+            final AbstractItem item = mItems.get(position);
+            ParkingSpotViewHolder holder = (ParkingSpotViewHolder) viewHolder;
+            holder.spotNo.setText(String.valueOf(item.getParkingSpot().spotNo));
             holder.imgSpot.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    toggleSelection(position);
-                    mOnSpotSelected.onSpotSelected(getSelectedItemCount());
+                    if (!item.getParkingSpot().isAvailable) {
+                        Toast.makeText(mContext, "Not Available", Toast.LENGTH_SHORT).show();
+                    } else {
+                        toggleSelection(item.getParkingSpot(), position);
+                        mOnSpotSelected.onSpotSelected(item.getParkingSpot());
+                    }
                 }
             });
 
-            holder.imgSpotSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+            setParkingSpotIcon(holder, item);
+        }
+    }
 
-        } else if (type == AbstractItem.TYPE_EDGE) {
-            final EdgeItem item = (EdgeItem) mItems.get(position);
-            EdgeViewHolder holder = (EdgeViewHolder) viewHolder;
-            count++;
-            holder.spotNo.setText(count+"");
-            holder.imgSpot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    toggleSelection(position);
-                    mOnSpotSelected.onSpotSelected(getSelectedItemCount());
-                }
-            });
-            holder.imgSpotSelected.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+    private void toggleSelection(ParkingSpot parkingSpot, int position) {
+        if (selectedPair != null) {
+            selectedPair.first.isSelected = false;
+            notifyItemChanged(selectedPair.second);
         }
 
+        parkingSpot.isSelected = true;
+        selectedPair = new Pair<>(parkingSpot, position);
+        notifyItemChanged(position);
+    }
+
+    private void setParkingSpotIcon(ParkingSpotViewHolder holder, AbstractItem item) {
+        if (item.getParkingSpot().isSelected) {
+            holder.imgSpot.setImageResource(R.drawable.ic_directions_black_car);
+        } else if (!item.getParkingSpot().isAvailable) {
+            holder.imgSpot.setImageResource(R.drawable.ic_directions_red_car);
+        } else {
+            holder.imgSpot.setImageResource(R.drawable.ic_directions_grey_car);
+        }
+    }
+
+    private static class ParkingSpotViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgSpot;
+        TextView spotNo;
+
+        public ParkingSpotViewHolder(@NonNull View itemView) {
+            super(itemView);
+            imgSpot = itemView.findViewById(R.id.img_spot);
+            spotNo = itemView.findViewById(R.id.spot_no);
+        }
+    }
+
+    private static class EmptyViewHolder extends RecyclerView.ViewHolder {
+
+        public EmptyViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
     }
 
 }
