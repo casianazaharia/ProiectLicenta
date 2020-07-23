@@ -57,6 +57,27 @@ public class RegisterActivity extends AppCompatActivity {
         textView2.setText("Sign Up");
     }
 
+    private boolean isEmailValid() {
+        boolean isEmailCorrect = true;
+        String email = eEmail.getText().toString();
+        if (!validEmail(email)) {
+            eEmail.setError("Not valid email");
+            isEmailCorrect = false;
+        }
+        return isEmailCorrect;
+    }
+
+    private boolean arePasswordsMatching() {
+        boolean arePasswordsMatching = true;
+        String password = ePassword.getText().toString();
+        String confirmPass = confirmPassword.getText().toString();
+        if (!password.equals(confirmPass)) {
+            confirmPassword.setError("Passwords do not match");
+            arePasswordsMatching = false;
+        }
+        return arePasswordsMatching;
+    }
+
     private void setActions() {
         registerBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,27 +102,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private boolean isEmailValid() {
-        boolean isEmailCorrect = true;
-        String email = eEmail.getText().toString();
-        if (!validEmail(email)) {
-            eEmail.setError("Not valid email");
-            isEmailCorrect = false;
-        }
-        return isEmailCorrect;
-    }
-
-    private boolean arePasswordsMatching() {
-        boolean arePasswordsMatching = true;
-        String password = ePassword.getText().toString();
-        String confirmPass = confirmPassword.getText().toString();
-        if (!password.equals(confirmPass)) {
-            confirmPassword.setError("Passwords do not match");
-            arePasswordsMatching = false;
-        }
-        return arePasswordsMatching;
     }
 
     private class UpdateDatabaseAsyncTask extends AsyncTask<User, Void, Boolean> {

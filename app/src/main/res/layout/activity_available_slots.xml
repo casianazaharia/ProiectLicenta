@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".AvailableSlotsActivity">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lst_items"
         android:layout_width="367dp"

@@ -4,5 +4,6 @@ public class ParkingSpot {
     int spotNo;
     boolean isAvailable;
     boolean isSelected;
+    boolean isBooked;
 
 }

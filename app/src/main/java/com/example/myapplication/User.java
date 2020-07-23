@@ -5,8 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "USERS")
-public class User {
+public class User implements Serializable {
 
     @PrimaryKey
     @NonNull
@@ -21,6 +23,9 @@ public class User {
 
     @ColumnInfo(name = "email")
     public String email;
+
+    @ColumnInfo(name = "parkingNo", defaultValue = "0")
+    public int parkingNo;
 
     public String getName() {
         return name;
@@ -53,4 +58,8 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public int getParkingNo() { return parkingNo; }
+
+    public void setParkingNo(int parkingNo) { this.parkingNo = parkingNo; }
 }

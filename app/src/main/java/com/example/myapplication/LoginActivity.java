@@ -13,12 +13,15 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String ARG_USER = "Username";
+
     private UserDao userDao;
     private EditText editUsername;
     private EditText editPassword;
     private TextView textView;
     private Button registerBtn;
     private Button loginBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +75,9 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(User foundUser) {
             super.onPostExecute(foundUser);
             String inputPassword = editPassword.getText().toString();
-            if (foundUser != null && inputPassword.equals(foundUser.password) ) {
+            if (foundUser != null && inputPassword.equals(foundUser.password)) {
                 Intent loggedin = new Intent(getApplicationContext(), AvailableSlotsActivity.class);
+                loggedin.putExtra(ARG_USER, foundUser);
                 startActivity(loggedin);
 
             } else {
