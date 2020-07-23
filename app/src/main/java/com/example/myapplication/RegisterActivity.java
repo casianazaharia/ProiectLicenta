@@ -13,11 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
-    UserDao userDao;
+    DbDao dbDao;
     private EditText eName;
     private EditText eUsername;
     private EditText ePassword;
@@ -43,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initDbDao() {
-        userDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
+        dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
     }
 
     private void initViews() {
@@ -109,11 +108,11 @@ public class RegisterActivity extends AppCompatActivity {
         protected Boolean doInBackground(User... users) {
             boolean userCreatedSuccessful;
             String username = users[0].getUsername();
-            if (userDao.findByUsername(username) != null) {
+            if (dbDao.findByUsername(username) != null) {
                 userCreatedSuccessful = false;
             } else {
                 userCreatedSuccessful = true;
-                userDao.addUser(users[0]);
+                dbDao.addUser(users[0]);
             }
             return userCreatedSuccessful;
         }

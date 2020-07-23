@@ -20,7 +20,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import javax.crypto.AEADBadTagException;
 
-public class QrCodeActivity extends AppCompatActivity {
+public class QrCodeActivity extends AvailableSlotsActivity {
     TextView showSpotNo;
     ImageView qrImage;
     Button cancel;
@@ -36,7 +36,9 @@ public class QrCodeActivity extends AppCompatActivity {
         qrImage = findViewById(R.id.qr_image);
         cancel = findViewById(R.id.cancelBooking);
 
-        String text = "Book a parking lot";
+        showSpotNo.setText("You selected spot no " + selectedSpotNo);
+
+        String text = "Book parking lot no " + selectedSpotNo;
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, 238, 274);

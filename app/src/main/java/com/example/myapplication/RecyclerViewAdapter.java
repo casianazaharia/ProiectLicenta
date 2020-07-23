@@ -96,7 +96,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private void setParkingSpotIcon(ParkingSpotViewHolder holder, AbstractItem item) {
         if (item.getParkingSpot().isSelected) {
             holder.imgSpot.setImageResource(R.drawable.ic_directions_black_car);
-        } else if(item.getParkingSpot().isBooked){
+        } else if (item.getParkingSpot().isBooked) {
             holder.imgSpot.setImageResource(R.drawable.ic_directions_green_car);
         } else if (!item.getParkingSpot().isAvailable) {
             holder.imgSpot.setImageResource(R.drawable.ic_directions_red_car);

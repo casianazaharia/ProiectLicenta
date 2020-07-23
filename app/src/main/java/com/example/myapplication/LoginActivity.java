@@ -15,7 +15,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String ARG_USER = "Username";
 
-    private UserDao userDao;
+    private DbDao dbDao;
     private EditText editUsername;
     private EditText editPassword;
     private TextView textView;
@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initDbDao() {
-        userDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
+        dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
     }
 
     private void initViews() {
@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected User doInBackground(String... strings) {
             String inputUsername = strings[0];
-            return userDao.findByUsername(inputUsername);
+            return dbDao.findByUsername(inputUsername);
         }
 
         @Override
