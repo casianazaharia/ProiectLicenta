@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -31,4 +32,8 @@ public interface DbDao {
 
     @Query("SELECT * FROM ParkingSpot")
     List<ParkingSpot> getAllParkingSpots();
+
+    @Query("UPDATE ParkingSpot SET  isAvailable = 'true', isBookedByUsername = null WHERE spotNo=:parkingSpotNo")
+    public int resetBookedParkingSpot(int parkingSpotNo);
+
 }

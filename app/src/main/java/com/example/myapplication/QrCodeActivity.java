@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,20 +12,24 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import javax.crypto.AEADBadTagException;
+import static com.example.myapplication.AvailableSlotsActivity.SPOT_NO;
+import static com.example.myapplication.LoginActivity.ARG_USER;
 
-public class QrCodeActivity extends AvailableSlotsActivity {
+public class QrCodeActivity extends AppCompatActivity {
     TextView showSpotNo;
     ImageView qrImage;
     Button cancel;
     Bitmap bitmap;
+
+    private int spotNo;
+    private User loggedUser;
+    private DbDao dbDao;
 
 
     @Override
@@ -36,9 +41,17 @@ public class QrCodeActivity extends AvailableSlotsActivity {
         qrImage = findViewById(R.id.qr_image);
         cancel = findViewById(R.id.cancelBooking);
 
-        showSpotNo.setText("You selected spot no " + selectedSpotNo);
+        spotNo = (int) getIntent().getSerializableExtra(SPOT_NO);
 
-        String text = "Book parking lot no " + selectedSpotNo;
+        loggedUser = (User) getIntent().getSerializableExtra(ARG_USER);
+
+        dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
+
+
+        showSpotNo.setText("You selected spot no " + spotNo);
+
+        String text = "Book parking lot no " + spotNo;
+
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, 238, 274);
@@ -49,9 +62,12 @@ public class QrCodeActivity extends AvailableSlotsActivity {
             e.printStackTrace();
         }
 
+        loggedUser.setParkingNo(spotNo);
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(QrCodeActivity.this);
                 builder.setTitle("Cancel Booking")
                         .setMessage("Are you sure you want to cancel your booking?")
@@ -59,10 +75,7 @@ public class QrCodeActivity extends AvailableSlotsActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                //delete the booking from database
-
-                                Intent back = new Intent(getApplicationContext(), AvailableSlotsActivity.class);
-                                startActivity(back);
+                                new DeleteParkingSpot().execute();
 
                             }
                         })
@@ -72,6 +85,26 @@ public class QrCodeActivity extends AvailableSlotsActivity {
             }
         });
 
-
     }
+
+    private class DeleteParkingSpot extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            dbDao.updateUserSelectedParkingSpot(loggedUser.getUsername(), 0);
+            dbDao.resetBookedParkingSpot(loggedUser.getParkingNo());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Intent back = new Intent(getApplicationContext(), AvailableSlotsActivity.class);
+            back.putExtra(ARG_USER,loggedUser);
+            startActivity(back);
+        }
+    }
+
+
 }

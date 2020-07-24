@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +16,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AvailableSlotsActivity extends LoginActivity {
+import static com.example.myapplication.LoginActivity.ARG_USER;
+
+public class AvailableSlotsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerViewAdapter;
@@ -27,6 +30,10 @@ public class AvailableSlotsActivity extends LoginActivity {
     private DbDao dbDao;
     public int selectedSpotNo;
 
+    public String userConnected;
+
+    public static final String SPOT_NO = "SpotNo";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +41,10 @@ public class AvailableSlotsActivity extends LoginActivity {
 
         bookSpot = findViewById(R.id.book_spot);
 
-        loggedUser = (User)  getIntent().getExtras().getSerializable(ARG_USER);
+        loggedUser = (User) getIntent().getSerializableExtra(ARG_USER);
+
         dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
+
 
         bookSpot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +59,9 @@ public class AvailableSlotsActivity extends LoginActivity {
                             .setPositiveButton("Scan now", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent scanNow = new Intent(getApplicationContext(), QrCodeActivity.class);
+                                    Intent scanNow = new Intent(AvailableSlotsActivity.this, QrCodeActivity.class);
+                                    scanNow.putExtra(SPOT_NO, selectedSpotNo);
+                                    scanNow.putExtra(ARG_USER, loggedUser);
                                     startActivity(scanNow);
                                 }
                             })
@@ -108,7 +119,7 @@ public class AvailableSlotsActivity extends LoginActivity {
         protected List<ParkingSpot> doInBackground(Void... voids) {
             List<ParkingSpot> dbList = dbDao.getAllParkingSpots();
             for (ParkingSpot spot : dbList) {
-                if (loggedUser.getUsername().equals(spot.getIsBookedByUsername())) {
+                 if (loggedUser.getUsername().equals(spot.getIsBookedByUsername())) {
                     spot.setBooked(true);
                 }
             }
