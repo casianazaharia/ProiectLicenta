@@ -26,6 +26,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private LayoutInflater mLayoutInflater;
 
     private Pair<ParkingSpot, Integer> selectedPair;
+    private Pair<ParkingSpot, Integer> bookedPair;
 
     public RecyclerViewAdapter(Context context, OnSpotSelected onSpotSelectedListener, List<AbstractItem> items) {
         mOnSpotSelected = onSpotSelectedListener;
@@ -78,7 +79,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-            setParkingSpotIcon(holder, item);
+            setParkingSpotIcon(holder, item, position);
         }
     }
 
@@ -93,11 +94,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemChanged(position);
     }
 
-    private void setParkingSpotIcon(ParkingSpotViewHolder holder, AbstractItem item) {
+    public void bookSelectedParkingSpot() {
+        if(bookedPair != null) {
+            bookedPair.first.isBooked = false;
+            bookedPair.first.isAvailable = true;
+            notifyItemChanged(bookedPair.second);
+        }
+        selectedPair.first.isBooked = true;
+        bookedPair = new Pair<>(selectedPair.first, selectedPair.second);
+        notifyItemChanged(bookedPair.second);
+    }
+
+    private void setParkingSpotIcon(ParkingSpotViewHolder holder, AbstractItem item, int position) {
         if (item.getParkingSpot().isSelected) {
             holder.imgSpot.setImageResource(R.drawable.ic_directions_black_car);
         } else if (item.getParkingSpot().isBooked) {
             holder.imgSpot.setImageResource(R.drawable.ic_directions_green_car);
+            bookedPair = new Pair<>(item.getParkingSpot(), position);
         } else if (!item.getParkingSpot().isAvailable) {
             holder.imgSpot.setImageResource(R.drawable.ic_directions_red_car);
         } else {

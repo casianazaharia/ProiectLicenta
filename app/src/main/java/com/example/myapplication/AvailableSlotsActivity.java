@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,8 @@ public class AvailableSlotsActivity extends AppCompatActivity {
     private User loggedUser;
 
     private DbDao dbDao;
-    public int selectedSpotNo;
+    private int selectedSpotNo;
+    private RecyclerViewAdapter adapter;
 
     public static final String SPOT_NO = "SpotNo";
 
@@ -45,9 +45,21 @@ public class AvailableSlotsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (loggedUser.getParkingNo() == 0) {
                     loggedUser.setParkingNo(selectedSpotNo);
+                    adapter.bookSelectedParkingSpot();
                     new AddParkingStatusAsyncTask().execute();
                 } else {
-                    Toast.makeText(AvailableSlotsActivity.this, "You already booked parking spot no " + loggedUser.getParkingNo(), Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AvailableSlotsActivity.this);
+                    builder.setTitle("Change booked spot")
+                            .setMessage("You already booked spot no " +  loggedUser.getParkingNo() + ". Are you sure you want to change your booking to spot no " + selectedSpotNo + "?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new UpdateParkingSpot().execute();
+                                }
+                            })
+                            .setNegativeButton("No", null);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 }
             }
         });
@@ -88,7 +100,7 @@ public class AvailableSlotsActivity extends AppCompatActivity {
         GridLayoutManager manager = new GridLayoutManager(this, COLUMNS);
         RecyclerView recyclerView = findViewById(R.id.lst_items);
         recyclerView.setLayoutManager(manager);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, onSpotSelectedListener, items);
+        adapter = new RecyclerViewAdapter(this, onSpotSelectedListener, items);
         recyclerView.setAdapter(adapter);
     }
 
@@ -97,7 +109,7 @@ public class AvailableSlotsActivity extends AppCompatActivity {
         protected List<ParkingSpot> doInBackground(Void... voids) {
             List<ParkingSpot> dbList = dbDao.getAllParkingSpots();
             for (ParkingSpot spot : dbList) {
-                 if (loggedUser.getUsername().equals(spot.getIsBookedByUsername())) {
+                if (loggedUser.getUsername().equals(spot.getIsBookedByUsername())) {
                     spot.setBooked(true);
                 }
             }
@@ -116,6 +128,7 @@ public class AvailableSlotsActivity extends AppCompatActivity {
         protected Void doInBackground(String... strings) {
             dbDao.updateBookedParkingSpot(loggedUser.getParkingNo(), loggedUser.getUsername());
             dbDao.updateUserSelectedParkingSpot(loggedUser.getUsername(), loggedUser.getParkingNo());
+
             return null;
         }
 
@@ -140,6 +153,25 @@ public class AvailableSlotsActivity extends AppCompatActivity {
         }
     }
 
+    public class UpdateParkingSpot extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            dbDao.updateUserSelectedParkingSpot(loggedUser.getUsername(), 0);
+            dbDao.resetBookedParkingSpot(loggedUser.getParkingNo());
+            loggedUser.setParkingNo(0);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            loggedUser.setParkingNo(selectedSpotNo);
+            adapter.bookSelectedParkingSpot();
+            new AddParkingStatusAsyncTask().execute();
+        }
+    }
 }
 
 

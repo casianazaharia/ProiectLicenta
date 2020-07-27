@@ -83,7 +83,7 @@ public class QrCodeActivity extends AppCompatActivity {
 
     }
 
-    private class DeleteParkingSpot extends AsyncTask<String, Void, Void> {
+    public class DeleteParkingSpot extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... strings) {
