@@ -2,18 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AvailableSlotsActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lst_items"
-        android:layout_width="367dp"
-        android:layout_height="502dp"
+        android:layout_width="382dp"
+        android:layout_height="458dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/book_spot"
@@ -22,8 +22,10 @@
         android:text="Book spot"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lst_items" />
+        app:layout_constraintTop_toBottomOf="@+id/lst_items"
+        app:layout_constraintVertical_bias="0.187" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

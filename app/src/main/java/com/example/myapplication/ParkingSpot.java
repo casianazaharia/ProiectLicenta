@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -20,6 +21,7 @@ public class ParkingSpot {
     @ColumnInfo(name = "isBooked")
     boolean isBooked;
 
+    @Nullable
     @ColumnInfo(name = "isBookedByUsername")
     String isBookedByUsername;
 
@@ -39,6 +41,7 @@ public class ParkingSpot {
 
     public void setBooked(boolean booked) { isBooked = booked; }
 
+    @Nullable
     public String getIsBookedByUsername() {
         return isBookedByUsername;
     }

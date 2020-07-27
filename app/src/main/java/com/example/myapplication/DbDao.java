@@ -24,7 +24,7 @@ public interface DbDao {
     @Query("SELECT * FROM USERS WHERE parkingNo=:parkingNo")
     int findByParkingSpotNo(int parkingNo);
 
-    @Query("UPDATE ParkingSpot SET isAvailable = 'false', isBookedByUsername = :bookedByUsername WHERE spotNo = :parkingSpotNo")
+    @Query("UPDATE ParkingSpot SET isAvailable = 0, isBookedByUsername = :bookedByUsername WHERE spotNo = :parkingSpotNo")
     public int updateBookedParkingSpot(int parkingSpotNo, String bookedByUsername);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -33,7 +33,7 @@ public interface DbDao {
     @Query("SELECT * FROM ParkingSpot")
     List<ParkingSpot> getAllParkingSpots();
 
-    @Query("UPDATE ParkingSpot SET  isAvailable = 'true', isBookedByUsername = null WHERE spotNo=:parkingSpotNo")
+    @Query("UPDATE ParkingSpot SET isAvailable = 1, isBookedByUsername = null WHERE spotNo=:parkingSpotNo")
     public int resetBookedParkingSpot(int parkingSpotNo);
 
 }

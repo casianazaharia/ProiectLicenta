@@ -20,17 +20,12 @@ import static com.example.myapplication.LoginActivity.ARG_USER;
 
 public class AvailableSlotsActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerViewAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private static final int COLUMNS = 5;
     private Button bookSpot;
     private User loggedUser;
 
     private DbDao dbDao;
     public int selectedSpotNo;
-
-    public String userConnected;
 
     public static final String SPOT_NO = "SpotNo";
 
@@ -45,29 +40,12 @@ public class AvailableSlotsActivity extends AppCompatActivity {
 
         dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
 
-
         bookSpot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (loggedUser.getParkingNo() == 0) {
                     loggedUser.setParkingNo(selectedSpotNo);
                     new AddParkingStatusAsyncTask().execute();
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AvailableSlotsActivity.this);
-                    builder.setTitle("Parking Spot Booking")
-                            .setMessage("You will have 20 minutes to scan your QR code")
-                            .setPositiveButton("Scan now", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Intent scanNow = new Intent(AvailableSlotsActivity.this, QrCodeActivity.class);
-                                    scanNow.putExtra(SPOT_NO, selectedSpotNo);
-                                    scanNow.putExtra(ARG_USER, loggedUser);
-                                    startActivity(scanNow);
-                                }
-                            })
-                            .setNegativeButton("Scan later", null);
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
                 } else {
                     Toast.makeText(AvailableSlotsActivity.this, "You already booked parking spot no " + loggedUser.getParkingNo(), Toast.LENGTH_SHORT).show();
                 }
@@ -139,6 +117,26 @@ public class AvailableSlotsActivity extends AppCompatActivity {
             dbDao.updateBookedParkingSpot(loggedUser.getParkingNo(), loggedUser.getUsername());
             dbDao.updateUserSelectedParkingSpot(loggedUser.getUsername(), loggedUser.getParkingNo());
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            AlertDialog.Builder builder = new AlertDialog.Builder(AvailableSlotsActivity.this);
+            builder.setTitle("Parking Spot Booking")
+                    .setMessage("You will have 20 minutes to scan your QR code")
+                    .setPositiveButton("Scan now", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent scanNow = new Intent(AvailableSlotsActivity.this, QrCodeActivity.class);
+                            scanNow.putExtra(SPOT_NO, selectedSpotNo);
+                            scanNow.putExtra(ARG_USER, loggedUser);
+                            startActivity(scanNow);
+                        }
+                    })
+                    .setNegativeButton("Scan later", null);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         }
     }
 

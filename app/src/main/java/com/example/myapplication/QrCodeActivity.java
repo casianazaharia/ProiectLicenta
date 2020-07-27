@@ -25,10 +25,9 @@ public class QrCodeActivity extends AppCompatActivity {
     TextView showSpotNo;
     ImageView qrImage;
     Button cancel;
-    Bitmap bitmap;
 
     private int spotNo;
-    private User loggedUser;
+    private User loggedUserQr;
     private DbDao dbDao;
 
 
@@ -40,13 +39,10 @@ public class QrCodeActivity extends AppCompatActivity {
         showSpotNo = findViewById(R.id.show_spot_no);
         qrImage = findViewById(R.id.qr_image);
         cancel = findViewById(R.id.cancelBooking);
-
-        spotNo = (int) getIntent().getSerializableExtra(SPOT_NO);
-
-        loggedUser = (User) getIntent().getSerializableExtra(ARG_USER);
-
         dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
 
+        spotNo = getIntent().getIntExtra(SPOT_NO, 0);
+        loggedUserQr = (User) getIntent().getSerializableExtra(ARG_USER);
 
         showSpotNo.setText("You selected spot no " + spotNo);
 
@@ -62,7 +58,7 @@ public class QrCodeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        loggedUser.setParkingNo(spotNo);
+        loggedUserQr.setParkingNo(spotNo);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,8 +87,9 @@ public class QrCodeActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(String... strings) {
-            dbDao.updateUserSelectedParkingSpot(loggedUser.getUsername(), 0);
-            dbDao.resetBookedParkingSpot(loggedUser.getParkingNo());
+            dbDao.updateUserSelectedParkingSpot(loggedUserQr.getUsername(), 0);
+            dbDao.resetBookedParkingSpot(loggedUserQr.getParkingNo());
+            loggedUserQr.setParkingNo(0);
 
             return null;
         }
@@ -101,7 +98,7 @@ public class QrCodeActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             Intent back = new Intent(getApplicationContext(), AvailableSlotsActivity.class);
-            back.putExtra(ARG_USER,loggedUser);
+            back.putExtra(ARG_USER, loggedUserQr);
             startActivity(back);
         }
     }
