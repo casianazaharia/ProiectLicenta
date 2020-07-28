@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,7 +45,7 @@ public class QrCodeActivity extends AppCompatActivity {
         spotNo = getIntent().getIntExtra(SPOT_NO, 0);
         loggedUserQr = (User) getIntent().getSerializableExtra(ARG_USER);
 
-        showSpotNo.setText("You selected spot no " + spotNo);
+        showSpotNo.setText("You booked spot no " + spotNo);
 
         String text = "Book parking lot no " + spotNo;
 
@@ -100,8 +101,8 @@ public class QrCodeActivity extends AppCompatActivity {
             Intent back = new Intent(getApplicationContext(), AvailableSlotsActivity.class);
             back.putExtra(ARG_USER, loggedUserQr);
             startActivity(back);
+
         }
     }
-
 
 }

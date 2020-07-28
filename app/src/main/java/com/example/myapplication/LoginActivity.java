@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent register = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(register);
+                finish();
             }
         });
 
@@ -79,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent loggedin = new Intent(getApplicationContext(), AvailableSlotsActivity.class);
                 loggedin.putExtra(ARG_USER, foundUser);
                 startActivity(loggedin);
+                finish();
 
             } else {
                 Toast.makeText(LoginActivity.this, "Wrong username/password", Toast.LENGTH_SHORT).show();

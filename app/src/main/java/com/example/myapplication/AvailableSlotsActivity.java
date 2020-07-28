@@ -1,7 +1,11 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,15 +13,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.myapplication.LoginActivity.ARG_USER;
 
-public class AvailableSlotsActivity extends AppCompatActivity {
+public class AvailableSlotsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int COLUMNS = 5;
     private Button bookSpot;
@@ -29,14 +38,35 @@ public class AvailableSlotsActivity extends AppCompatActivity {
 
     public static final String SPOT_NO = "SpotNo";
 
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
+    private TextView tvName;
+    private TextView tvMail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_available_slots);
-
-        bookSpot = findViewById(R.id.book_spot);
+        setContentView(R.layout.nav_available_slots);
 
         loggedUser = (User) getIntent().getSerializableExtra(ARG_USER);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        tvName = navigationView.getHeaderView(0).findViewById(R.id.tv_username);
+        tvMail = navigationView.getHeaderView(0).findViewById(R.id.tv_mail);
+
+        tvName.setText("Name: " + loggedUser.getName());
+        tvMail.setText("Email: " + loggedUser.getEmail());
+
+
+        bookSpot = findViewById(R.id.book_spot);
 
         dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
 
@@ -50,7 +80,7 @@ public class AvailableSlotsActivity extends AppCompatActivity {
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(AvailableSlotsActivity.this);
                     builder.setTitle("Change booked spot")
-                            .setMessage("You already booked spot no " +  loggedUser.getParkingNo() + ". Are you sure you want to change your booking to spot no " + selectedSpotNo + "?")
+                            .setMessage("You already booked spot no " + loggedUser.getParkingNo() + ". Are you sure you want to change your booking to spot no " + selectedSpotNo + "?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -104,6 +134,35 @@ public class AvailableSlotsActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id) {
+
+            case R.id.nav_booking:
+
+                if (loggedUser.getParkingNo() != 0) {
+                    Intent intent = new Intent(AvailableSlotsActivity.this, QrCodeActivity.class);
+                    intent.putExtra(SPOT_NO, loggedUser.getParkingNo());
+                    intent.putExtra(ARG_USER, loggedUser);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "You don't have any booking!", Toast.LENGTH_LONG).show();
+                }
+
+                break;
+
+            case R.id.nav_logout:
+
+                break;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
     private class LoadParkingSpots extends AsyncTask<Void, Void, List<ParkingSpot>> {
         @Override
         protected List<ParkingSpot> doInBackground(Void... voids) {
@@ -145,6 +204,7 @@ public class AvailableSlotsActivity extends AppCompatActivity {
                             scanNow.putExtra(SPOT_NO, selectedSpotNo);
                             scanNow.putExtra(ARG_USER, loggedUser);
                             startActivity(scanNow);
+
                         }
                     })
                     .setNegativeButton("Scan later", null);
@@ -172,6 +232,15 @@ public class AvailableSlotsActivity extends AppCompatActivity {
             new AddParkingStatusAsyncTask().execute();
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
 
 

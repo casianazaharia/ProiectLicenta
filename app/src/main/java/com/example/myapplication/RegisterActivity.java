@@ -123,6 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (userCreated) {
                 Intent register = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(register);
+                finish();
             } else {
                 eUsername.setError("Username already exists");
             }
