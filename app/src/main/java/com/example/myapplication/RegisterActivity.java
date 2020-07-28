@@ -13,11 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
-    UserDao userDao;
+    DbDao dbDao;
     private EditText eName;
     private EditText eUsername;
     private EditText ePassword;
@@ -43,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initDbDao() {
-        userDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
+        dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
     }
 
     private void initViews() {
@@ -57,21 +56,26 @@ public class RegisterActivity extends AppCompatActivity {
         textView2.setText("Sign Up");
     }
 
-  /*  private boolean validate(){
-        boolean check = true;
+    private boolean isEmailValid() {
+        boolean isEmailCorrect = true;
         String email = eEmail.getText().toString();
+        if (!validEmail(email)) {
+            eEmail.setError("Not valid email");
+            isEmailCorrect = false;
+        }
+        return isEmailCorrect;
+    }
+
+    private boolean arePasswordsMatching() {
+        boolean arePasswordsMatching = true;
         String password = ePassword.getText().toString();
         String confirmPass = confirmPassword.getText().toString();
-
-        if(!password.equals(confirmPass)){
-            Toast.makeText(RegisterActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-            return check = false;
-        } else if (!validEmail(email)){
-            Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            check = false;
+        if (!password.equals(confirmPass)) {
+            confirmPassword.setError("Passwords do not match");
+            arePasswordsMatching = false;
         }
-        return check;
-    }*/
+        return arePasswordsMatching;
+    }
 
     private void setActions() {
         registerBt.setOnClickListener(new View.OnClickListener() {
@@ -99,37 +103,16 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isEmailValid() {
-        boolean isEmailCorrect = true;
-        String email = eEmail.getText().toString();
-        if (!validEmail(email)) {
-            eEmail.setError("Not valid email");
-            isEmailCorrect = false;
-        }
-        return isEmailCorrect;
-    }
-
-    private boolean arePasswordsMatching() {
-        boolean arePasswordsMatching = true;
-        String password = ePassword.getText().toString();
-        String confirmPass = confirmPassword.getText().toString();
-        if (!password.equals(confirmPass)) {
-            confirmPassword.setError("Passwords do not match");
-            arePasswordsMatching = false;
-        }
-        return arePasswordsMatching;
-    }
-
     private class UpdateDatabaseAsyncTask extends AsyncTask<User, Void, Boolean> {
         @Override
         protected Boolean doInBackground(User... users) {
             boolean userCreatedSuccessful;
             String username = users[0].getUsername();
-            if (userDao.findByUsername(username) != null) {
+            if (dbDao.findByUsername(username) != null) {
                 userCreatedSuccessful = false;
             } else {
                 userCreatedSuccessful = true;
-                userDao.addUser(users[0]);
+                dbDao.addUser(users[0]);
             }
             return userCreatedSuccessful;
         }
@@ -140,6 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (userCreated) {
                 Intent register = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(register);
+                finish();
             } else {
                 eUsername.setError("Username already exists");
             }

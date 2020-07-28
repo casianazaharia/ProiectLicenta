@@ -13,12 +13,15 @@ import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private UserDao userDao;
+    public static final String ARG_USER = "Username";
+
+    private DbDao dbDao;
     private EditText editUsername;
     private EditText editPassword;
     private TextView textView;
     private Button registerBtn;
     private Button loginBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initDbDao() {
-        userDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
+        dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
     }
 
     private void initViews() {
@@ -48,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent register = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(register);
+                finish();
             }
         });
 
@@ -65,16 +69,18 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected User doInBackground(String... strings) {
             String inputUsername = strings[0];
-            return userDao.findByUsername(inputUsername);
+            return dbDao.findByUsername(inputUsername);
         }
 
         @Override
         protected void onPostExecute(User foundUser) {
             super.onPostExecute(foundUser);
             String inputPassword = editPassword.getText().toString();
-            if (foundUser != null && inputPassword.equals(foundUser.password) ) {
+            if (foundUser != null && inputPassword.equals(foundUser.password)) {
                 Intent loggedin = new Intent(getApplicationContext(), AvailableSlotsActivity.class);
+                loggedin.putExtra(ARG_USER, foundUser);
                 startActivity(loggedin);
+                finish();
 
             } else {
                 Toast.makeText(LoginActivity.this, "Wrong username/password", Toast.LENGTH_SHORT).show();
