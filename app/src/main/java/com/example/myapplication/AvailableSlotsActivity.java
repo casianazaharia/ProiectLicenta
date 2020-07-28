@@ -155,6 +155,9 @@ public class AvailableSlotsActivity extends AppCompatActivity implements Navigat
 
             case R.id.nav_logout:
 
+                Intent logout = new Intent(AvailableSlotsActivity.this, LoginActivity.class);
+                startActivity(logout);
+                finish();
                 break;
         }
 
