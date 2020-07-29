@@ -26,6 +26,7 @@ public class QrCodeActivity extends AppCompatActivity {
     TextView showSpotNo;
     ImageView qrImage;
     Button cancel;
+    TextView spotNumber;
 
     private int spotNo;
     private User loggedUserQr;
@@ -40,12 +41,14 @@ public class QrCodeActivity extends AppCompatActivity {
         showSpotNo = findViewById(R.id.show_spot_no);
         qrImage = findViewById(R.id.qr_image);
         cancel = findViewById(R.id.cancelBooking);
+        spotNumber = findViewById(R.id.spot_num);
         dbDao = RegisterDatabase.getMyAppDatabase(getApplicationContext()).myDao();
 
         spotNo = getIntent().getIntExtra(SPOT_NO, 0);
         loggedUserQr = (User) getIntent().getSerializableExtra(ARG_USER);
 
-        showSpotNo.setText("You booked spot no " + spotNo);
+        showSpotNo.setText("You booked spot number ");
+        spotNumber.setText("" + spotNo);
 
         String text = "Book parking lot no " + spotNo;
 

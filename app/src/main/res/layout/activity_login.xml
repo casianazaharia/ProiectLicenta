@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@drawable/gradient">
 
     <EditText
         android:id="@+id/editUsername"
@@ -12,12 +13,13 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/username"
+        android:textColor="#040405"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="" />
+        android:autofillHints="#040405" />
 
     <EditText
         android:id="@+id/editPassword"
@@ -26,11 +28,37 @@
         android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="@string/password"
+        android:textColor="#040405"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editUsername"
-        android:autofillHints="" />
+        android:autofillHints="#040405" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="128dp"
+        android:text="@string/textview"
+        android:textColor="#040405"
+        app:layout_constraintBottom_toTopOf="@+id/editUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_buttons"
+        android:text="Login"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/registerBtn"
+        app:layout_constraintTop_toBottomOf="@+id/editPassword"
+        android:textColor="#040405"/>
 
     <Button
         android:id="@+id/registerBtn"
@@ -42,27 +70,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPassword"
-        app:layout_constraintVertical_bias="0.498" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="128dp"
-        android:text="@string/textview"
-        app:layout_constraintBottom_toTopOf="@+id/editUsername"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/loginBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/registerBtn"
-        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+        app:layout_constraintVertical_bias="0.498"
+        android:textAllCaps="false"
+        android:background="@drawable/custom_buttons"
+        android:textColor="#040405"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

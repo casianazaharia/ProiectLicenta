@@ -155,9 +155,20 @@ public class AvailableSlotsActivity extends AppCompatActivity implements Navigat
 
             case R.id.nav_logout:
 
-                Intent logout = new Intent(AvailableSlotsActivity.this, LoginActivity.class);
-                startActivity(logout);
-                finish();
+                AlertDialog.Builder logOut = new AlertDialog.Builder(AvailableSlotsActivity.this);
+                logOut.setTitle("Log Out")
+                        .setMessage("Are you sure you want to log out? ")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent logout = new Intent(AvailableSlotsActivity.this, LoginActivity.class);
+                                startActivity(logout);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", null);
+                AlertDialog alertDialog = logOut.create();
+                alertDialog.show();
                 break;
         }
 
