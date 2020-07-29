@@ -80,7 +80,7 @@ public class AvailableSlotsActivity extends AppCompatActivity implements Navigat
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(AvailableSlotsActivity.this);
                     builder.setTitle("Change booked spot")
-                            .setMessage("You already booked spot no " + loggedUser.getParkingNo() + ". Are you sure you want to change your booking to spot no " + selectedSpotNo + "?")
+                            .setMessage("You've already booked spot number " + loggedUser.getParkingNo() + ". Are you sure you want to change your booking to spot number " + selectedSpotNo + "?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -105,7 +105,7 @@ public class AvailableSlotsActivity extends AppCompatActivity implements Navigat
         final OnSpotSelected onSpotSelectedListener = new OnSpotSelected() {
             @Override
             public void onSpotSelected(ParkingSpot selectedParkingSpot) {
-                bookSpot.setText("Book spot no " + selectedParkingSpot.spotNo);
+                bookSpot.setText("Book spot number " + selectedParkingSpot.spotNo);
                 selectedSpotNo = selectedParkingSpot.spotNo;
             }
         };
