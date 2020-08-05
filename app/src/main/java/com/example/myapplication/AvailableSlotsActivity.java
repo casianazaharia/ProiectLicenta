@@ -170,6 +170,17 @@ public class AvailableSlotsActivity extends AppCompatActivity implements Navigat
                 AlertDialog alertDialog = logOut.create();
                 alertDialog.show();
                 break;
+
+            case R.id.nav_exit:
+
+                if(loggedUser.getParkingNo() == 0){
+                    Toast.makeText(getApplicationContext(), "You don't have any booking!", Toast.LENGTH_LONG).show();
+                } else{
+                    Intent intent = new Intent(AvailableSlotsActivity.this, ExitQrCodeActivity.class);
+                    intent.putExtra(SPOT_NO, loggedUser.getParkingNo());
+                    intent.putExtra(ARG_USER, loggedUser);
+                    startActivity(intent);
+                }
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
