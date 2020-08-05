@@ -174,7 +174,7 @@ public class AvailableSlotsActivity extends AppCompatActivity implements Navigat
             case R.id.nav_exit:
 
                 if(loggedUser.getParkingNo() == 0){
-                    Toast.makeText(getApplicationContext(), "You don't have any booking!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "You need to park your car!", Toast.LENGTH_LONG).show();
                 } else{
                     Intent intent = new Intent(AvailableSlotsActivity.this, ExitQrCodeActivity.class);
                     intent.putExtra(SPOT_NO, loggedUser.getParkingNo());
