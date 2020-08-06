@@ -229,7 +229,6 @@ public class AvailableSlotsActivity extends AppCompatActivity implements Navigat
                             scanNow.putExtra(SPOT_NO, selectedSpotNo);
                             scanNow.putExtra(ARG_USER, loggedUser);
                             startActivity(scanNow);
-
                         }
                     })
                     .setNegativeButton("Scan later", null);

@@ -45,7 +45,7 @@ public class ExitQrCodeActivity extends AppCompatActivity {
         spotNo = getIntent().getIntExtra(SPOT_NO, 0);
         loggedUserQr = (User) getIntent().getSerializableExtra(ARG_USER);
 
-        showSpotNo.setText("Your booked number ");
+        showSpotNo.setText("Your booked spot ");
         spotNumber.setText("" + spotNo);
 
         String text = "Exit the parking area";

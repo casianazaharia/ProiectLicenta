@@ -7,19 +7,32 @@
     tools:context=".LoginActivity"
     android:background="@drawable/gradient">
 
+    <ImageView
+        android:layout_width="340dp"
+        android:layout_height="167dp"
+        android:src="@drawable/tudor_parking"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.064" />
+
     <EditText
         android:id="@+id/editUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autofillHints="#040405"
         android:ems="10"
         android:hint="@string/username"
-        android:textColor="#040405"
         android:inputType="textPersonName"
+        android:textColor="#040405"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="#040405" />
+        app:layout_constraintVertical_bias="0.464" />
 
     <EditText
         android:id="@+id/editPassword"
@@ -42,10 +55,12 @@
         android:layout_marginBottom="128dp"
         android:text="@string/textview"
         android:textColor="#040405"
-        app:layout_constraintBottom_toTopOf="@+id/editUsername"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.888" />
 
     <Button
         android:id="@+id/loginBtn"
@@ -54,25 +69,26 @@
         android:background="@drawable/custom_buttons"
         android:text="Login"
         android:textAllCaps="false"
+        android:textColor="#040405"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/registerBtn"
+        app:layout_constraintHorizontal_bias="0.235"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPassword"
-        android:textColor="#040405"/>
+        app:layout_constraintVertical_bias="0.573" />
 
     <Button
         android:id="@+id/registerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginLeft="76dp"
+        android:layout_marginStart="256dp"
+        android:background="@drawable/custom_buttons"
         android:text="@string/register"
+        android:textAllCaps="false"
+        android:textColor="#040405"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editPassword"
-        app:layout_constraintVertical_bias="0.498"
-        android:textAllCaps="false"
-        android:background="@drawable/custom_buttons"
-        android:textColor="#040405"/>
+        app:layout_constraintVertical_bias="0.573" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
